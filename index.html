@@ -1,2 +1,71 @@
-    { id: 1, title: "Черная футболка Oversize", price: 1500, img: "ССЫЛКА_НА_ТВОЕ_ФОТО" },
-    { id: 2, title: "Худи с капюшоном", price: 3200, img: "ССЫЛКА_НА_ТВОЕ_ФОТО" }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DT Men's Clothing</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #17212b;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+        }
+        h1 { font-size: 22px; margin-bottom: 20px; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .product-card {
+            background: #202b36;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .product-icon { font-size: 32px; margin-bottom: 10px; }
+        .product-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+        .product-price { color: #5288c1; font-weight: bold; font-size: 15px; margin-bottom: 10px; }
+        .btn {
+            background-color: #5288c1;
+            color: #fff;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>DT Men's Clothing</h1>
+    <div class="products-grid" id="catalog"></div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const products = [
+            { id: 1, title: "Футболка Oversize", price: 1500 },
+            { id: 2, title: "Худи Premium", price: 3200 },
+            { id: 3, title: "Джинсы Карго", price: 2800 },
+            { id: 4, title: "Куртка Бомбер", price: 4500 }
+        ];
+
+        const catalogContainer = document.getElementById('catalog');
+        catalogContainer.innerHTML = products.map(p => `
+            <div class="product-card">
+                <div class="product-icon">👕</div>
+                <div class="product-title">${p.title}</div>
+                <div class="product-price">${p.price} ₽</div>
+                <button class="btn" onclick="alert('Добавлено в корзину!')">В корзину</button>
+            </div>
+        `).join('');
+    </script>
+</body>
+</html>
