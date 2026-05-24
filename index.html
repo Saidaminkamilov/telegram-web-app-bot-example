@@ -19,25 +19,33 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+            margin-bottom: 80px;
         }
         .product-card {
             background: #202b36;
             border-radius: 12px;
             padding: 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .product-icon { font-size: 32px; margin-bottom: 10px; }
-        .product-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
-        .product-price { color: #5288c1; font-weight: bold; font-size: 15px; margin-bottom: 10px; }
+        .product-icon { font-size: 36px; margin-bottom: 10px; }
+        .product-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; min-height: 35px; }
+        .product-price { color: #5288c1; font-weight: bold; font-size: 16px; margin-bottom: 12px; }
         .btn {
             background-color: #5288c1;
             color: #fff;
             border: none;
-            padding: 8px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 8px;
             width: 100%;
             font-weight: 600;
             cursor: pointer;
+            font-size: 13px;
+        }
+        .btn-active {
+            background-color: #e53e3e;
         }
     </style>
 </head>
@@ -57,15 +65,58 @@
             { id: 4, title: "Куртка Бомбер", price: 4500 }
         ];
 
-        const catalogContainer = document.getElementById('catalog');
-        catalogContainer.innerHTML = products.map(p => `
-            <div class="product-card">
-                <div class="product-icon">👕</div>
-                <div class="product-title">${p.title}</div>
-                <div class="product-price">${p.price} ₽</div>
-                <button class="btn" onclick="alert('Добавлено в корзину!')">В корзину</button>
-            </div>
-        `).join('');
+        let cart = [];
+
+        function render() {
+            const html = products.map(p => {
+                const inCart = cart.includes(p.id);
+                return `
+                    <div class="product-card">
+                        <div class="product-icon">👕</div>
+                        <div class="product-title">${p.title}</div>
+                        <div class="product-price">${p.price} ₽</div>
+                        <button class="btn ${inCart ? 'btn-active' : ''}" onclick="toggleCart(${p.id})">
+                            ${inCart ? 'Убрать' : 'В корзину'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('catalog').innerHTML = html;
+            updateButton();
+        }
+
+        function toggleCart(id) {
+            if (cart.includes(id)) {
+                cart = cart.filter(item => item !== id);
+            } else {
+                cart.push(id);
+            }
+            render();
+        }
+
+        function updateButton() {
+            if (cart.length > 0) {
+                let total = 0;
+                let items = [];
+                cart.forEach(id => {
+                    const p = products.find(prod => prod.id === id);
+                    total += p.price;
+                    items.push(`${p.title} (${p.price} ₽)`);
+                });
+                tg.MainButton.text = `Оформить заказ: ${total} ₽`;
+                tg.MainButton.show();
+                
+                tg.MainButton.offClick();
+                tg.MainButton.onClick(() => {
+                    tg.sendData(JSON.stringify({ info: "Заказ DT", items: items, total: total }));
+                    tg.close();
+                });
+            } else {
+                tg.MainButton.hide();
+            }
+        }
+
+        render();
     </script>
 </body>
 </html>
