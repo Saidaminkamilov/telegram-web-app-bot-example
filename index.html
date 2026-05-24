@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #fff);
-            color: var(--tg-theme-text-color, #000);
+            background-color: var(--tg-theme-bg-color, #17212b);
+            color: var(--tg-theme-text-color, #f5f5f5);
             margin: 0;
             padding: 15px;
         }
@@ -20,6 +20,7 @@
         .header h1 {
             margin: 0;
             font-size: 24px;
+            color: var(--tg-theme-text-color, #fff);
         }
         .products-grid {
             display: grid;
@@ -28,46 +29,51 @@
             margin-bottom: 80px;
         }
         .product-card {
-            background: var(--tg-theme-secondary-bg-color, #f4f4f5);
+            background: var(--tg-theme-secondary-bg-color, #202b36);
             border-radius: 12px;
             padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .product-img {
             width: 100%;
             height: 140px;
             object-fit: cover;
             border-radius: 8px;
-            background-color: #ddd;
+            background-color: #333;
         }
         .product-title {
             font-size: 14px;
             font-weight: 600;
             margin: 8px 0 4px 0;
-            height: 34px;
+            height: 38px;
             overflow: hidden;
+            line-height: 1.3;
         }
         .product-price {
-            color: var(--tg-theme-link-color, #2481cc);
+            color: var(--tg-theme-link-color, #5288c1);
             font-weight: bold;
             font-size: 16px;
             margin-bottom: 10px;
         }
         .btn {
-            background-color: var(--tg-theme-button-color, #2481cc);
+            background-color: var(--tg-theme-button-color, #5288c1);
             color: var(--tg-theme-button-text-color, #fff);
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 10px 12px;
+            border-radius: 8px;
             width: 100%;
             font-weight: 600;
             cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
         }
         .btn-remove {
-            background-color: #e53e3e;
+            background-color: #ec5b5b !important;
+            color: #fff !important;
         }
     </style>
 </head>
@@ -83,12 +89,12 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // СПИСОК ТОВАРОВ (Можно добавлять сколько угодно копируя блоки)
+        // НАСТОЯЩИЙ СПИСОК ТОВАРОВ С РАБОЧИМИ ФОТОГРАФИЯМИ
         const products = [
-            { id: 1, title: "Черная футболка Oversize", price: 1500, img: "https://placehold.co" },
-            { id: 2, title: "Худи с капюшоном", price: 3200, img: "https://placehold.co" },
-            { id: 3, title: "Джинсы Карго", price: 2800, img: "https://placehold.co" },
-            { id: 4, title: "Куртка Бомбер", price: 4500, img: "https://placehold.co" }
+            { id: 1, title: "Черная футболка Oversize", price: 1500, img: "https://unsplash.com" },
+            { id: 2, title: "Худи Свитшот Premium", price: 3200, img: "https://unsplash.com" },
+            { id: 3, title: "Джинсы Карго Стиль", price: 2800, img: "https://unsplash.com" },
+            { id: 4, title: "Осенняя куртка Бомбер", price: 4500, img: "https://unsplash.com" }
         ];
 
         let cart = {};
@@ -100,7 +106,7 @@
                     <div class="product-title">${p.title}</div>
                     <div class="product-price">${p.price} ₽</div>
                     <button class="btn ${cart[p.id] ? 'btn-remove' : ''}" onclick="toggleCart(${p.id})">
-                        ${cart[p.id] ? 'Убрать' : 'В корзину'}
+                        ${cart[p.id] ? 'Убрать из корзины' : 'В корзину'}
                     </button>
                 </div>
             `).join('');
@@ -132,8 +138,9 @@
                 tg.MainButton.text = `Оформить заказ: ${totalPrice} ₽`;
                 tg.MainButton.show();
                 
+                // Сброс старых обработчиков перед добавлением нового
+                tg.MainButton.offClick();
                 tg.MainButton.onClick(() => {
-                    // Отправка данных заказа обратно в чат бота
                     const orderData = {
                         info: "Новый заказ в DT Men's Clothing!",
                         items: itemsText,
