@@ -3,115 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Richttag Clothing</title>
+    <title>DT Men's Clothing</title>
     <script src="https://telegram.org"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
+            background-color: #17212b;
+            color: #f5f5f5;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
         }
-
-        .item-card {
-            border: 1px solid var(--tg-theme-hint-color, #ccc);
+        h1 { font-size: 22px; margin-bottom: 20px; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding-bottom: 30px;
+        }
+        .product-card {
+            background-color: #24303f;
             border-radius: 12px;
             padding: 15px;
-            margin-top: 20px;
-            background-color: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-
-        .btn {
-            background-color: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .product-title { font-size: 18px; font-weight: bold; margin: 10px 0; }
+        .product-sizes { font-size: 14px; color: #708499; margin-bottom: 15px; }
+        .buy-btn {
+            background-color: #2ea6ff;
+            color: white;
             border: none;
+            border-radius: 8px;
             padding: 12px 24px;
             font-size: 16px;
-            border-radius: 8px;
+            font-weight: bold;
             cursor: pointer;
             width: 100%;
-            margin-top: 15px;
-            display: block;
-            box-sizing: border-box;
+            transition: background-color 0.2s;
         }
+        .buy-btn:hover { background-color: #1a91e6; }
     </style>
 </head>
 <body>
 
-    <h2>Коллекция Richttag 👟</h2>
+    <h1>Коллекция Richttag</h1>
 
-    <!-- ТОВАР 1 -->
-    <div class="item-card">
-        <img src="ChristianDior.jpg" alt="Christian Dior 1" style="width:100%; max-width:250px; height:auto; border-radius:12px;">
-        <h3>Christian Dior (Вид 1)</h3>
-        <p>Размеры: 38 - 45</p>
-        <button class="btn" onclick="buyItem('Christian_Dior_Model_1')">Купить в 1 клик</button>
+    <div class="products-grid">
+        <!-- Товар 1 -->
+        <div class="product-card">
+            <img src="ChristianDior.jpg" alt="Christian Dior">
+            <div class="product-title">Christian Dior (Вид 1)</div>
+            <div class="product-sizes">Размеры: 38 - 45</div>
+            <button class="buy-btn" onclick="buyItem('Christian Dior Вид 1')">Купить в 1 клик</button>
+        </div>
+
+        <!-- Товар 2 -->
+        <div class="product-card">
+            <img src="ChristianDior1.jpg" alt="Christian Dior">
+            <div class="product-title">Christian Dior (Вид 2)</div>
+            <div class="product-sizes">Размеры: 38 - 45</div>
+            <button class="buy-btn" onclick="buyItem('Christian Dior Вид 2')">Купить в 1 клик</button>
+        </div>
+
+        <!-- Товар 3 -->
+        <div class="product-card">
+            <img src="ChristianDior2.jpg" alt="Christian Dior">
+            <div class="product-title">Christian Dior (Вид 3)</div>
+            <div class="product-sizes">Размеры: 38 - 45</div>
+            <button class="buy-btn" onclick="buyItem('Christian Dior Вид 3')">Купить в 1 клик</button>
+        </div>
     </div>
 
-    <!-- ТОВАР 2 -->
-    <div class="item-card">
-        <img src="ChristianDior1.jpg" alt="Christian Dior 2" style="width:100%; max-width:250px; height:auto; border-radius:12px;">
-        <h3>Christian Dior (Вид 2)</h3>
-        <p>Размеры: 38 - 45</p>
-        <button class="btn" onclick="buyItem('Christian_Dior_Model_2')">Купить в 1 клик</button>
-    </div>
-
-    <!-- ТОВАР 3 -->
-    <div class="item-card">
-        <img src="ChristianDior2.jpg" alt="Christian Dior 3" style="width:100%; max-width:250px; height:auto; border-radius:12px;">
-        <h3>Christian Dior (Вид 3)</h3>
-        <p>Размеры: 38 - 45</p>
-        <button class="btn" onclick="buyItem('Christian_Dior_Model_3')">Купить в 1 клик</button>
-    </div>
-
-    <script src="https://telegram.org"></script>
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
         function buyItem(productCode) {
-            // !!! ОБЯЗАТЕЛЬНО ВПИШИТЕ ЮЗЕРНЕЙМ ВАШЕГО БОТА (например, "MyShoesBot") БЕЗ ЗНАКА @ !!!
-            const botUsername = "RichttagClothingBot";
-
-            // Превращаем текст в безопасную ссылку
-            const cleanedCode = productCode.replace(/\s+/g, '_');
-
-            // Генерируем глубокую ссылку на старт команды с параметром товара
-            const botLink = `https://t.me{botUsername}?start=${cleanedCode}`;
-
-            // Даем команду Telegram перенаправить нас в чат бота и закрыть сайт
-            tg.openTelegramLink(botLink);
+            const safeCode = productCode.replace(/\s+/g, '_');
             tg.close();
+            tg.openTelegramLink('https://t.me' + safeCode);
         }
     </script>
 </body>
 </html>
-
-<script src="https://telegram.org"></script>
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
-
-    function buyItem(productCode) {
-        // Юзернейм вашего бота строго без знака @
-        const botUsername = "RichttagClothingBot";
-
-        // Превращаем пробелы в нижние подчеркивания
-        const cleanedCode = productCode.replace(/\s+/g, '_');
-
-        // Формируем правильную ссылку перехода в чат с косыми кавычками (клавиша Ё)
-        const botLink = `https://t.me{botUsername}?start=${cleanedCode}`;
-
-        // Открываем чат и закрываем каталог
-        tg.openTelegramLink(botLink);
-        tg.close();
-    }
-</script>
-</body>
-</html>
-
-
