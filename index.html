@@ -79,17 +79,19 @@
             <button class="buy-btn" onclick="buyItem('Christian Dior Вид 3')">Купить в 1 клик</button>
         </div>
     </div>
-
+    
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
         function buyItem(productCode) {
-            const safeCode = productCode.replace(/\s+/g, '_');
-            tg.close();
-            tg.openTelegramLink('https://t.me' + safeCode);
-        }
+    const safeCode = productCode.replace(/\s+/g, '_');
+    tg.openTelegramLink('https://t.me/RichttagClothingBot' + safeCode);
+    setTimeout(() => {
+        tg.close();
+    }, 100);
+}
     </script>
 </body>
 </html>
